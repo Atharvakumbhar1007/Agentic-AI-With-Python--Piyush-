@@ -1,21 +1,28 @@
-from dotenv import load_dotenv
-from openai import OpenAI
 import os
+from dotenv import load_dotenv
+from google import genai
 
+# Load environment variables from .env
 load_dotenv()
 
-print("API key found:", bool(os.getenv("OPENAI_API_KEY")))
+# Get Gemini API key
+api_key = os.getenv("GEMINI_API_KEY")
 
-client = OpenAI()
+# Check if API key exists
+print("API key found:", bool(api_key))
 
-response = client.chat.completions.create(
-    model="gpt-4o-mini",
-    messages=[
-        {
-            "role": "user",
-            "content": "Hey I am Atharva! Nice to meet you..."
-        }
-    ]
+# Stop the program if API key is missing
+if not api_key:
+    raise ValueError("GEMINI_API_KEY is not set in the .env file")
+
+# Create Gemini client
+client = genai.Client(api_key=api_key)
+
+# Send request to Gemini
+interaction = client.interactions.create(
+    model="gemini-3.6-flash",
+    input="Hello, how are you?"
 )
 
-print(response.choices[0].message.content)
+# Print Gemini's response
+print(interaction.output_text)
