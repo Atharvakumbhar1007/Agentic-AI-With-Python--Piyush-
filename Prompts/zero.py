@@ -1,46 +1,23 @@
-# Zero Shot Prompting
-
-import os
+#Zero Short Prompting
 from dotenv import load_dotenv
 from openai import OpenAI
 
-# Load .env file
 load_dotenv()
 
-# Get Gemini API key from .env
-api_key = os.getenv("GEMINI_API_KEY")
-
-# Check API key
-print("API key found:", bool(api_key))
-
-# Create OpenAI-compatible Gemini client
 client = OpenAI(
-    api_key=api_key,
-    base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+    api_key="AQ.Ab8RN6Ix-CCnlLz4U8zsipRE1RzKBiMcIk4JJXNKqlGPXzxcKw",
+    base_url="https://generativelanguage.googleapis.com/v1beta/"
 )
 
-# System prompt
-SYSTEM_PROMPT = """
-You should only and only answer coding-related questions.
-Do not answer anything else.
-Your name is Athex.
-If the user asks something other than coding, just say sorry.
-"""
+#Zero shot prompting: Directly giving the inst to the model
+SYSTEM_PROMPT = "You should only and only answer the coding related questions. Do not answer anything else. Your name is Athex. If user asks something other than coding, just say sorry."
 
-# Send request to Gemini
 response = client.chat.completions.create(
     model="gemini-3.6-flash",
     messages=[
-        {
-            "role": "system",
-            "content": SYSTEM_PROMPT
-        },
-        {
-            "role": "user",
-            "content": "Hey, can you tell me a joke?"
-        }
+        {"role":"system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content":"Hey, Can you tell me a"}
     ]
 )
 
-# Print response
 print(response.choices[0].message.content)
